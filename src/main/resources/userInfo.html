@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>User Information</h1>
+    <p>Welcome, <span th:text="${UserInfo.userName}">[UserName]</span>!</p>
+
+    <!-- Display User Info -->
+    <div>
+        <h2>Current Info:</h2>
+        <p><strong>User ID:</strong> <span th:text="${UserInfo.userId}">[UserID]</span></p>
+        <p><strong>Username:</strong> <span th:text="${UserInfo.userName}">[UserName]</span></p>
+        <p><strong>Password:</strong> <span th:text="${UserInfo.passWord}">[Password]</span></p>
+        <p><strong>Sex:</strong> <span th:text="${UserInfo.sex}">[Sex]</span></p>
+        <p><strong>Role:</strong> <span th:text="${UserInfo.role}">[Role]</span></p>
+        <p><strong>Signature:</strong> <span th:text="${UserInfo.signature}">[Signature]</span></p>
+    </div>
+
+    <!-- Update User Info -->
+    <h2>Update Info:</h2>
+    <form method="post" action="update-userInfo">
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" th:value="${UserInfo.passWord}">
+        </div>
+        <div class="form-group">
+            <label for="sex">Sex:</label>
+            <select id="sex" name="sex" th:value="${UserInfo.sex}">
+                <option value="Male" th:selected="${UserInfo.sex == 'Male'}">Male</option>
+                <option value="Female" th:selected="${UserInfo.sex == 'Female'}">Female</option>
+                <option value="Other" th:selected="${UserInfo.sex == 'Other'}">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="signature">Signature:</label>
+            <textarea id="signature" name="signature" rows="4" th:text="${UserInfo.signature}"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit">Update Info</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+

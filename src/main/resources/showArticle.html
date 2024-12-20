@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有文章</title>
+</head>
+<body>
+<!-- 显示当前用户信息 -->
+<div>
+    <h2>当前用户：<span th:text="${UserInfo.UserName}">User Name</span></h2>
+</div>
+
+<!-- 展示所有文章 -->
+<h3>所有文章</h3>
+<div>
+    <ul>
+        <li th:each="article: ${AllArticle}">
+            <p>文章标题:<span th:text="${article.getTitle()}">111</span></p>
+            <p>作者：<span th:text="${article.getAuthorId()}">作者名</span></p>
+            <p>创作时间：<span th:text="${article.getCreateTime()}">2024-12-19</span></p>
+            <p>简介：<span th:text="${article.getContent()}">文章内容摘要</span>...</p>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

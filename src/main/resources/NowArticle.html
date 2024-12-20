@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章详情</title>
+</head>
+<body>
+<!-- 显示文章详情 -->
+<h2 th:text="${article.title}">文章标题</h2>
+<p>作者：<span th:text="${article.authorId}">作者名</span></p>
+<p>创作时间：<span th:text="${article.createTime}">2024-12-19</span></p>
+<div>
+    <p><span th:text="${article.content}">文章内容</span></p>
+</div>
+
+<!-- 用户点赞功能 -->
+<div>
+    <button th:onclick="'location.href=\'/add-FavorArticle?articleId=' + ${article.articleId} + '\'" >喜欢这篇文章</button>
+</div>
+
+<!-- 评论区 -->
+<h3>评论区</h3>
+<div>
+    <ul>
+        <li th:each="message : ${articleMessages}">
+            <p>评论者ID：<span th:text="${message.userId}">评论者ID</span></p>
+            <p>评论时间：<span th:text="${message.createTime}">2024-12-19</span></p>
+            <p>评论内容：<span th:text="${message.content}">评论内容</span></p>
+        </li>
+    </ul>
+</div>
+
+<!-- 添加评论 -->
+<h4>发表评论</h4>
+<form th:action="@{/add-Message}" method="post">
+    <input type="hidden" name="articleId" th:value="${article.articleId}" />
+    <textarea name="MessageContent" rows="4" cols="50" placeholder="请输入评论内容..."></textarea>
+    <br>
+    <button type="submit">提交评论</button>
+</form>
+</body>
+</html>

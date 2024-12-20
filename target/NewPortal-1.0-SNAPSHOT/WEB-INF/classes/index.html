@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>welcome</title>
+    <title>新闻门户首页</title>
 </head>
 <body>
+<!-- 页面头部 -->
+<header>
+    <h1>新闻门户</h1>
+    <!-- 导航菜单 -->
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">首页</a></li>
+            <li><a th:href="@{/articles}">文章</a></li>
+            <li><a th:href="@{/profile}">个人信息</a></li>
+        </ul>
+    </nav>
+</header>
 
+<!-- 搜索框 -->
+<section>
+    <form th:action="@{/search}" method="get">
+        <label for="search">搜索文章：</label>
+        <input type="text" id="search" name="query" placeholder="输入关键词">
+        <button type="submit">搜索</button>
+    </form>
+</section>
+
+<!-- 主要内容区域 -->
+<main>
+    <h2>最新新闻</h2>
+    <ul>
+        <!-- 示例文章列表，实际数据由后台传递 -->
+        <li th:each="article : ${articles}">
+            <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}"></a>
+        </li>
+    </ul>
+</main>
+
+<!-- 页面尾部 -->
+<footer>
+    <p>版权所有 &copy; 2024 新闻门户</p>
+</footer>
 </body>
 </html>
