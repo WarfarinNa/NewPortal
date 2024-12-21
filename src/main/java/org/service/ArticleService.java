@@ -91,4 +91,52 @@ public class ArticleService {
             mapper.UpdateArticleByArticleId(title, content, createTime, ArticleId);
         }
     }
+
+    public void deleteFavorArticleByFavorId(int ArticleId,int UserId) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            mapper.deleteFavorArticleByFavorId(ArticleId,UserId);
+        }
+    }
+
+    public List<Article> getArticlesByPage(int pageNum, int pageSize) {
+        try (SqlSession sqlSession = MybatisUtil.getSession()) {
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            int offset = (pageNum - 1) * pageSize; // 计算偏移量
+            return mapper.getArticlesByPage(offset, pageSize);
+        }
+    }
+
+    public int getTotalArticleCount() {
+        try (SqlSession sqlSession = MybatisUtil.getSession()) {
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            return mapper.getTotalArticleCount();
+        }
+    }
+
+    public Article getAllFromTempArticleByUserId(int userId) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            return mapper.getAllFromTempArticleByUserId(userId);
+        }
+    }
+
+    public void addTempArticle(int UserId,String Title,String Content) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            int count = mapper.checkTempArticleExist(UserId);
+            if (count > 0) {
+                mapper.updateTempArticle(UserId, Title, Content);
+            } else {
+                mapper.addTempArticle(UserId, Title, Content);
+            }
+        }
+    }
+
+    public void deleteTempArticle(int UserId) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            mapper.deleteTempArticle(UserId);
+        }
+    }
 }

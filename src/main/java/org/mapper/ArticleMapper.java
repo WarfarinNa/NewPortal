@@ -46,4 +46,31 @@ public interface ArticleMapper {
     @Update("UPDATE article SET Title = #{title},Content = #{content}, CreateTime = #{createTime} WHERE ArticleId = #{ArticleId}")
     void UpdateArticleByArticleId(@Param("title")String title,@Param("content")
     String content,@Param("createTime")String createTime,@Param("ArticleId")int ArticleId);
+
+    @Delete("Delete  FROM favoritesarticle where ArticleId = #{ArticleId} and UserId =#{UserId}")
+    void deleteFavorArticleByFavorId(@Param("ArticleId") int ArticleId,@Param("UserId") int UserId);
+
+    @Select("SELECT * FROM article LIMIT #{offset}, #{limit}")
+    List<Article> getArticlesByPage(@Param("offset")int offset, @Param("limit")int limit);
+
+    @Select("SELECT COUNT(*) FROM article")
+    int getTotalArticleCount();
+
+    @Select("SELECT * FROM temparticle where UserId = #{userId}")
+    Article getAllFromTempArticleByUserId(@Param("userId")int userId);
+
+    @Insert("INSERT into temparticle(UserId, Title,Content) VALUES (#{UserId},#{Title},#{Content})")
+    void addTempArticle(@Param("UserId")int UserId,@Param("Title")String Title,@Param("Content")String Content);
+
+    @Update("UPDATE temparticle SET Title = #{Title}, Content = #{Content} WHERE UserId = #{UserId}")
+    void updateTempArticle(@Param("UserId") int UserId, @Param("Title") String Title, @Param("Content") String Content);
+
+    @Select("SELECT COUNT(*) FROM temparticle WHERE UserId = #{UserId}")
+    int checkTempArticleExist(@Param("UserId") int UserId);
+
+    @Delete("DELETE FROM temparticle WHERE UserId = #{UserId}")
+    void deleteTempArticle(@Param("UserId") int UserId);
+
+
+
 }

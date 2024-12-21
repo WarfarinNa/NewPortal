@@ -8,15 +8,45 @@
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #0056b3;
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav form {
+            margin: 0 0.5rem;
+        }
+        nav button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        nav button:hover {
+            background-color: #0056b3;
         }
         .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ddd;
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .form-group {
             margin-bottom: 15px;
@@ -34,7 +64,7 @@
             box-sizing: border-box;
         }
         .form-group button {
-            background-color: #007BFF;
+            background-color: #007bff;
             color: white;
             padding: 10px 15px;
             border: none;
@@ -44,36 +74,95 @@
         .form-group button:hover {
             background-color: #0056b3;
         }
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        li p {
+            margin: 0.5rem 0;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-logout {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .btn-logout i {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
+<header>
+    <h1>用户个人中心</h1>
+</header>
+<nav>
+    <form action="show-AllArticle" method="get">
+        <button type="submit">所有文章</button>
+    </form>
+    <form action="update-userInfo" method="get">
+        <button type="submit">个人信息</button>
+    </form>
+    <form action="showUpload-article" method="get">
+        <button type="submit">修改文章</button>
+    </form>
+    <form action="upload-Article" method="get">
+        <button type="submit">上传文章</button>
+    </form>
+</nav>
 <div class="container">
     <h1>用户信息</h1>
-    <p><span th:text="${UserInfo.userName}">[UserName]</span>登录中</p>
+    <p><span th:text="${UserInfo.userName}">[UserName]</span> 登录中</p>
 
-    <!-- Display User Info -->
     <div>
         <h2>个人信息 :</h2>
         <p><strong>个人ID:</strong> <span th:text="${UserInfo.userId}">[NULL]</span></p>
         <p><strong>用户名:</strong> <span th:text="${UserInfo.userName}">[NULL]</span></p>
-        <p><strong>密码:</strong> <span th:text="${UserInfo.passWord}">[NULL]</span></p>
         <p><strong>性别:</strong> <span th:text="${UserInfo.sex}">[NULL]</span></p>
         <p><strong>角色:</strong> <span th:text="${UserInfo.role}">[NULL]</span></p>
         <p><strong>个性签名:</strong> <span th:text="${UserInfo.signature}">[NULL]</span></p>
     </div>
-    <!-- Display Favor Info -->
+
+    <a href="logout" class="btn-logout">
+        <i class="fas fa-sign-out-alt"></i> 退出登录
+    </a>
+
     <div>
         <h2>收藏的文章:</h2>
         <ul>
             <li th:each="article : ${FavorArticle}">
-                <p>
-                    <span th:text="${article.getTitle()}">空</span>
-                </p>
+                <p class="article-title"><span th:text="${article.title}">文章标题</span></p>
+                <div class="button-group">
+                    <button th:onclick="'window.location.href=\'get-NowArticle?ArticleId=' + ${article.articleId} + '\';'">查看详情</button>
+                    <button th:onclick="'window.location.href=\'delete-FavorArticle?ArticleId=' + ${article.articleId} + '\';'">删除收藏</button>
+                </div>
             </li>
         </ul>
     </div>
 
-    <!-- Update User Info -->
     <h2>更新信息:</h2>
     <form method="post" action="update-userInfo">
         <div class="form-group">
@@ -99,4 +188,3 @@
 </div>
 </body>
 </html>
-

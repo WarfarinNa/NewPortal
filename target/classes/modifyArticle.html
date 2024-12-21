@@ -4,29 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>修改文章</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #0056b3;
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav form {
+            margin: 0 0.5rem;
+        }
+        nav button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        nav button:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h1>修改文章</h1>
+<header>
+    <h1>修改文章</h1>
+</header>
+<nav>
+    <form action="show-AllArticle" method="get">
+        <button type="submit">所有文章</button>
+    </form>
+    <form action="update-userInfo" method="get">
+        <button type="submit">个人信息</button>
+    </form>
+    <form action="showUpload-article" method="get">
+        <button type="submit">修改文章</button>
+    </form>
+    <form action="upload-Article" method="get">
+        <button type="submit">上传文章</button>
+    </form>
+</nav>
+<div class="container">
+    <form action="Update-article" method="post">
+        <input type="hidden" name="articleId" th:value="${WaitUpdateArticle.articleId}" />
 
-<!-- 显示当前文章标题和内容 -->
-<form action="Update-article" method="post">
-    <input type="hidden" name="articleId" th:value="${WaitUpdateArticle.articleId}" />
+        <div class="form-group">
+            <label for="title">标题：</label>
+            <input type="text" id="title" name="title" th:value="${WaitUpdateArticle.title}" required />
+        </div>
 
-    <div>
-        <label for="title">标题：</label>
-        <input type="text" id="title" name="title" th:value="${WaitUpdateArticle.title}" required />
-    </div>
+        <div class="form-group">
+            <label for="content">内容：</label>
+            <textarea id="content" name="content" rows="8" required th:text="${WaitUpdateArticle.content}"></textarea>
+        </div>
 
-    <div>
-        <label for="content">内容：</label>
-        <textarea id="content" name="content" required th:text="${WaitUpdateArticle.content}"></textarea>
-    </div>
-
-    <div>
         <button type="submit">确认修改</button>
-    </div>
-</form>
-
-<a href="showUpload-article">返回文章列表</a>
+    </form>
+    <a href="showUpload-article">返回文章列表</a>
+</div>
 </body>
 </html>

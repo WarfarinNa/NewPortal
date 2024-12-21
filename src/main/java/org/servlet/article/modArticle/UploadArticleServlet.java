@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.entity.Article;
 import org.entity.User;
 import org.service.ArticleService;
 import org.service.UserService;
@@ -31,8 +32,12 @@ public class UploadArticleServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User userinfo = (User) session.getAttribute("UserInfo");
+
+        Article article = articleService.getAllFromTempArticleByUserId(userinfo.UserId);
+
         Context context = new Context();
         context.setVariable("UserInfo",userService.getNowUserInfoByUserName(userinfo.UserName));
+        context.setVariable("TempArticle",article);
         ThymeleafUtil.process("uploadArticle.html",context,resp.getWriter());
 
     }
@@ -49,6 +54,7 @@ public class UploadArticleServlet extends HttpServlet {
 
         if(userService.findUserRoleByUserName(userinfo.UserName).equals("user")){
             if (articleService.UploadArticle(title,content,userinfo.UserId, formattedDateTime)) {
+                articleService.deleteTempArticle(userinfo.UserId);
                 resp.sendRedirect("upload-Article");
             }
         }

@@ -1,4 +1,4 @@
-package org.servlet.article;
+package org.servlet.article.searchArticle;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

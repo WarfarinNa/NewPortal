@@ -2,7 +2,6 @@ package org.service;
 
 import org.apache.ibatis.session.SqlSession;
 import org.entity.User;
-import org.mapper.ArticleMapper;
 import org.mapper.UserMapper;
 import org.util.MybatisUtil;
 
@@ -25,6 +24,13 @@ public class UserService {
         try(SqlSession sqlSession = MybatisUtil.getSession()){
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
             return mapper.getNowUserInfoByUserName(username);
+        }
+    }
+
+    public void addUserInfo(String username, String password, String sex) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+            mapper.addUserInfo(username, password, sex);
         }
     }
 }

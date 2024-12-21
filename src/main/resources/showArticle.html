@@ -1,32 +1,177 @@
-
 <!DOCTYPE html>
 <html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>所有文章</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #0056b3;
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav form {
+            margin: 0 0.5rem;
+        }
+        nav button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        nav button:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h2 {
+            margin-bottom: 1rem;
+        }
+        form {
+            margin-bottom: 2rem;
+        }
+        label, input, button {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input {
+            padding: 0.5rem;
+            width: calc(100% - 1rem);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        li p {
+            margin: 0.5rem 0;
+        }
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .article-meta {
+            font-size: 0.9rem;
+            color: #777;
+        }
+        .button-group button {
+            margin-right: 0.5rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        .pagination button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+    </style>
 </head>
 <body>
-<!-- 显示当前用户 -->
-<h2>当前用户：<span th:text="${UserInfo.UserName}">User Name</span></h2>
-<form action="search-NowArticle" method="post">
-    <label for="ArticleTitle">文章标题:</label>
-    <input type="text" id="ArticleTitle" name="ArticleTitle">
-    <button type="submit">搜索</button>
-</form>
-<!-- 展示所有文章 -->
-<h3>文章列表</h3>
-<ul>
-    <li th:each="article : ${AllArticle}">
-        <p>
-            文章标题：<span th:text="${article.title}">文章标题</span>
-            <!-- 跳转到 NowArticle 页面按钮 -->
-            <button th:onclick="'window.location.href=\'get-NowArticle?ArticleId=' + ${article.articleId} + '\';'">查看详情</button>
-        </p>
-        <p>作者：<span th:text="${article.authorId}">序列号</span></p>
-        <p>创作时间：<span th:text="${article.createTime}">2024-12-19</span></p>
-        <p>内容摘要：<span th:text="${article.content}">文章内容摘要</span>...</p>
-    </li>
-</ul>
+<header>
+    <h1>文章管理系统</h1>
+</header>
+<nav>
+    <form action="show-AllArticle" method="get">
+        <button type="submit">所有文章</button>
+    </form>
+    <form action="update-userInfo" method="get">
+        <button type="submit">个人信息</button>
+    </form>
+    <form action="showUpload-article" method="get">
+        <button type="submit">修改文章</button>
+    </form>
+    <form action="upload-Article" method="get">
+        <button type="submit">上传文章</button>
+    </form>
+</nav>
+<div class="container">
+    <!-- 显示当前用户 -->
+    <h2>当前用户：<span th:text="${UserInfo.UserName}">User Name</span></h2>
+    <form action="search-NowArticle" method="post">
+        <label for="ArticleTitle"></label>
+        <input type="text" id="ArticleTitle" name="ArticleTitle" placeholder="输入新闻标题（支持模糊搜索）">
+        <button type="submit">搜索</button>
+        <p th:if="${searchErrorMessage}" style="color: red">不能输入空信息</p>
+    </form>
+    <!-- 展示所有文章 -->
+    <h3>文章列表</h3>
+    <ul>
+        <li th:each="article : ${AllArticle}">
+            <p class="article-title"><span th:text="${article.title}">文章标题</span></p>
+            <p class="article-meta">作者：<span th:text="${article.authorId}">序列号</span></p>
+            <p class="article-meta">发表时间：<span th:text="${article.createTime}">2024-12-19</span></p>
+            <p th:text="${#strings.abbreviate(article.content, 50)}+...">文章内容摘要</p>
+            <div class="button-group">
+                <button th:onclick="'window.location.href=\'get-NowArticle?ArticleId=' + ${article.articleId} + '\';'">查看详情</button>
+            </div>
+        </li>
+    </ul>
+
+    <div class="pagination">
+        <span th:if="${page > 1}">
+            <button th:onclick="'window.location.href=\'show-AllArticle?page=' + ${page - 1} + '\';'">上一页</button>
+        </span>
+        <h4>
+            <span th:text="'第 ' + ${page} + ' 页 / 共 ' + ${totalPages} + ' 页'"></span>
+        </h4>
+        <span th:if="${page < totalPages}">
+            <button th:onclick="'window.location.href=\'show-AllArticle?page=' + ${page + 1} + '\';'">下一页</button>
+        </span>
+    </div>
+
+</div>
 </body>
 </html>
-

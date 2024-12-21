@@ -1,15 +1,100 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>搜索结果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #0056b3;
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav form {
+            margin: 0 0.5rem;
+        }
+        nav button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        nav button:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 <header>
     <h1>搜索结果</h1>
 </header>
 
-<main>
+<nav>
+    <form action="show-AllArticle" method="get">
+        <button type="submit">所有文章</button>
+    </form>
+    <form action="update-userInfo" method="get">
+        <button type="submit">个人信息</button>
+    </form>
+    <form action="showUpload-article" method="get">
+        <button type="submit">修改文章</button>
+    </form>
+    <form action="upload-Article" method="get">
+        <button type="submit">上传文章</button>
+    </form>
+</nav>
+
+<div class="container">
     <!-- 判断是否有搜索结果 -->
     <div th:if="${SearchArticleResult == null || SearchArticleResult.isEmpty()}">
         <p>无搜索结果</p>
@@ -19,22 +104,20 @@
     <div th:if="${SearchArticleResult != null && !SearchArticleResult.isEmpty()}">
         <ul>
             <li th:each="article : ${SearchArticleResult}">
-                <h2 th:text="${article.title}">Article Title</h2>
-                <p th:text="${article.content}">Article Content</p>
+                <h2 th:text="${article.title}">文章标题</h2>
+                <p th:text="${article.content}">文章内容</p>
                 <p>
                     <span>作者: </span>
                     <span th:text="${article.authorId}">作者</span>
                 </p>
                 <p>
-                    <span>发表时间 </span>
+                    <span>发表时间: </span>
                     <span th:text="${article.createTime}">2024-01-01</span>
                 </p>
                 <button th:onclick="'window.location.href=\'get-NowArticle?ArticleId=' + ${article.articleId} + '\';'">查看详情</button>
             </li>
         </ul>
     </div>
-</main>
-
-
+</div>
 </body>
 </html>

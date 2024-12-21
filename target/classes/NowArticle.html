@@ -2,44 +2,146 @@
 <html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文章详情</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #0056b3;
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav form {
+            margin: 0 0.5rem;
+        }
+        nav button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        nav button:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        li p {
+            margin: 0.5rem 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<!-- 显示文章详情 -->
-<h2 th:text="${NowArticle.title}">文章标题</h2>
-<p>作者：<span th:text="${NowArticle.authorId}">作者名</span></p>
-<p>创作时间：<span th:text="${NowArticle.createTime}">2024-12-19</span></p>
-<p>内容：<span th:text="${NowArticle.content}">文章内容</span></p>
+<header>
+    <h1>文章详情</h1>
+</header>
+<nav>
+    <form action="show-AllArticle" method="get">
+        <button type="submit">所有文章</button>
+    </form>
+    <form action="update-userInfo" method="get">
+        <button type="submit">个人信息</button>
+    </form>
+    <form action="showUpload-article" method="get">
+        <button type="submit">修改文章</button>
+    </form>
+    <form action="upload-Article" method="get">
+        <button type="submit">上传文章</button>
+    </form>
+</nav>
+<div class="container">
+    <!-- 显示文章详情 -->
+    <h2 th:text="${NowArticle.title}">文章标题</h2>
+    <p>作者：<span th:text="${NowArticle.authorId}">作者名</span></p>
+    <p>创作时间：<span th:text="${NowArticle.createTime}">2024-12-19</span></p>
+    <p>内容：<span th:text="${NowArticle.content}">文章内容</span></p>
 
-<h2 >收藏文章</h2>
-<form action="add-FavorArticle" method="post">
-    <button type="submit">喜欢这篇文章</button>
-</form>
+    <h2>收藏文章</h2>
+    <form action="add-FavorArticle" method="post">
+        <button type="submit">喜欢这篇文章</button>
+    </form>
 
-<!-- 评论区 -->
-<h3>评论区</h3>
-<ul>
-    <li th:each="comment : ${MessageBoard}">
-        <p>
-            评论者ID：<span th:text="${comment.userId}">评论者Id</span>
-            发布时间：<span th:text="${comment.creatTime}">2024-12-19</span>
-        </p>
-        <p>评论内容：<span th:text="${comment.content}">评论内容</span></p>
-<!--        <form th:action="'delete-Message?MessageId='+ ${comment.MessageId}" method="get">-->
-<!--        <form th:action="'window.location.href=\'delete-Message?MessageId='+ ${comment.MessageId} + '\';'" method="get">-->
-<!--            <button type="submit">删除评论</button>-->
-<!--        </form>-->
-        <button th:onclick="'window.location.href=\'delete-Message?MessageId=' + ${comment.MessageId} + '\';'">删除评论</button>
-    </li>
-</ul>
+    <!-- 评论区 -->
+    <h3>评论区</h3>
+    <ul>
+        <li th:each="comment : ${MessageBoard}">
+            <p>
+                评论者ID：<span th:text="${comment.userId}">评论者Id</span>
+                发布时间：<span th:text="${comment.creatTime}">2024-12-19</span>
+            </p>
+            <p>评论内容：<span th:text="${comment.content}">评论内容</span></p>
+            <button th:onclick="'window.location.href=\'delete-Message?MessageId=' + ${comment.MessageId} + '\';'">删除评论</button>
+        </li>
+    </ul>
 
-
-<h2>添加评论</h2>
-<form th:action="'add-Message?ArticleId='+ ${NowArticle.articleId}" method="post">
-    <label>
-        <textarea name="MessageContent" placeholder="请输入评论内容"></textarea>
-    </label>
-    <button type="submit">提交评论</button>
-</form>
+    <h2>添加评论</h2>
+    <form th:action="'add-Message?ArticleId='+ ${NowArticle.articleId}" method="post">
+        <div class="form-group">
+            <label>
+                <textarea name="MessageContent" placeholder="请输入评论内容"></textarea>
+            </label>
+        </div>
+        <button type="submit">提交评论</button>
+    </form>
+</div>
 </body>
 </html>

@@ -6,15 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.entity.Article;
+import org.entity.User;
 import org.service.ArticleService;
 import org.service.UserService;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/search-NowArticle")
-public class SearchArticleServlet extends HttpServlet {
+@WebServlet("/delete-FavorArticle")
+public class DeleteFavorArticleServlet extends HttpServlet {
     ArticleService articleService;
     UserService userService;
 
@@ -27,15 +26,12 @@ public class SearchArticleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String articleTitle = req.getParameter("ArticleTitle");
-        List<Article> articles = articleService.findArticlesByTitle(articleTitle);
         HttpSession session = req.getSession();
-        session.setAttribute("SearchArticleResult",articles);
-        resp.sendRedirect("search-ArticleResult");
+        User user = (User) session.getAttribute("UserInfo");
+        int ArticleId = Integer.parseInt(req.getParameter("ArticleId"));
+
+        articleService.deleteFavorArticleByFavorId(ArticleId,user.UserId);
+
+        resp.sendRedirect("update-userInfo");
     }
 }

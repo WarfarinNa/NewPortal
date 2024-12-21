@@ -3,116 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Article</title>
+    <title>个人中心</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #0056b3;
+            padding: 0.5rem 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
-
+        nav form {
+            margin: 0 0.5rem;
+        }
+        nav button {
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        nav button:hover {
+            background-color: #0056b3;
+        }
         .container {
-            background-color: #ffffff;
-            padding: 20px 30px;
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
         }
-
-        .container h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #333333;
-            text-align: center;
-        }
-
-        .user-info {
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 16px;
-            color: #555555;
-        }
-
         .form-group {
             margin-bottom: 15px;
         }
-
         .form-group label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
-            color: #555555;
         }
-
-        .form-group input,
-        .form-group textarea {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #dddddd;
+            padding: 8px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 16px;
             box-sizing: border-box;
         }
-
         .form-group textarea {
-            resize: vertical;
-            height: 150px;
+            height: 300px; /* 设置固定高度 */
+            resize: none; /* 禁止调整大小 */
         }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #007BFF;
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
         .form-group button {
-            background-color: #007BFF;
+            background-color: #007bff;
             color: white;
-            font-size: 16px;
-            padding: 10px;
-            width: 100%;
+            padding: 10px 15px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
-
         .form-group button:hover {
             background-color: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        li p {
+            margin: 0.5rem 0;
         }
     </style>
 </head>
 <body>
+<header>
+    <h1>上传文章</h1>
+</header>
+<nav>
+    <form action="show-AllArticle" method="get">
+        <button type="submit">所有文章</button>
+    </form>
+    <form action="update-userInfo" method="get">
+        <button type="submit">个人信息</button>
+    </form>
+    <form action="showUpload-article" method="get">
+        <button type="submit">修改文章</button>
+    </form>
+    <form action="upload-Article" method="get">
+        <button type="submit">上传文章</button>
+    </form>
+</nav>
 <div class="container">
-    <h2>Upload Your Article</h2>
+    <h2>编辑文章</h2>
 
-    <!-- 用户身份信息 -->
     <div class="user-info">
-        Welcome, <span th:text="${UserInfo.userName}"></span>! You are logged in as
-        <span th:text="${UserInfo.Role}"></span>.
+        欢迎：<span th:text="${UserInfo.userName}"></span>
+        <span th:text="${UserInfo.Role}"></span>
     </div>
 
-    <!-- 文章上传表单 -->
     <form action="upload-Article" method="post">
         <div class="form-group">
-            <label for="title">Article Title:</label>
-            <input type="text" id="title" name="title" placeholder="Enter article title" required>
+            <label for="title">文章标题：</label>
+            <input type="text" id="title" name="title" placeholder="输入文章标题..." required
+                   th:value="${TempArticle != null ? TempArticle.title : ''}">
         </div>
         <div class="form-group">
-            <label for="content">Article Content:</label>
-            <textarea id="content" name="content" placeholder="Write your article here" required></textarea>
+            <label for="content">文章内容：</label>
+            <textarea id="content" name="content" placeholder="输入文章..." required
+                      th:text="${TempArticle != null ? TempArticle.content : ''}"></textarea>
         </div>
         <div class="form-group">
-            <button type="submit">Upload Article</button>
+            <button type="submit">确定上传</button>
         </div>
     </form>
+
+    <form id="tempUploadForm" action="TempUpload-article" method="post">
+        <input type="hidden" name="title" id="hiddenTitle">
+        <input type="hidden" name="content" id="hiddenContent">
+        <div class="form-group">
+            <button type="submit" onclick="saveDraft()">暂存草稿</button>
+        </div>
+    </form>
+
+    <script>
+        function saveDraft() {
+            // 获取标题和内容的值
+            var title = document.getElementById('title').value;
+            var content = document.getElementById('content').value;
+
+            // 将值填充到隐藏字段
+            document.getElementById('hiddenTitle').value = title;
+            document.getElementById('hiddenContent').value = content;
+        }
+    </script>
+
 </div>
 </body>
 </html>

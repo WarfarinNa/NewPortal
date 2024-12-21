@@ -1,4 +1,4 @@
-package org.servlet.user;
+package org.servlet.auth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -6,19 +6,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.entity.Article;
-import org.entity.User;
 import org.service.ArticleService;
 import org.service.UserService;
 import org.thymeleaf.context.Context;
 import org.util.ThymeleafUtil;
-import org.util.TimeUtil;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/update-userInfo")
-public class UpdateUserInfoServlet extends HttpServlet {
+@WebServlet("/signUp")
+public class SignUpServlet extends HttpServlet {
     ArticleService articleService;
     UserService userService;
 
@@ -31,31 +27,18 @@ public class UpdateUserInfoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        User userinfo = (User) session.getAttribute("UserInfo");
-
-        List<Article> articles = articleService.getAllFavorArticle(userinfo.UserId);
-        userinfo = userService.getNowUserInfoByUserName(userinfo.UserName);
         Context context = new Context();
-
-        context.setVariable("UserInfo",userinfo);
-        context.setVariable("FavorArticle",articles);
-        ThymeleafUtil.process("userInfo.html",context,resp.getWriter());
-
+        ThymeleafUtil.process("signUp.html",context,resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+        String username = req.getParameter("UserName");
+        String password = req.getParameter("PassWord");
+        String sex = req.getParameter("Sex");
 
-        String password = req.getParameter("password");
-        String sex = req.getParameter("sex");
-        String signature = req.getParameter("signature");
-
-        User userinfo = (User) session.getAttribute("UserInfo");
-
-        if (userService.upDateUserInfoByUserName(userinfo.UserName,password,sex,signature)) {
-            resp.sendRedirect("update-userInfo");
-        }
+        userService.addUserInfo(username,password,sex);
+        resp.sendRedirect("login");
     }
 }
