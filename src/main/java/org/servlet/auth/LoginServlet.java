@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("UserInfo",userinfo);
         if(service.auth(username,password,session)){
             session.setAttribute("UserInfo",userService.getNowUserInfoByUserName(userinfo.UserName));
-            resp.sendRedirect("index");
+            resp.sendRedirect("show-AllArticle");
         }else{
             resp.sendRedirect("login");
         }

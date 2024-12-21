@@ -1,4 +1,4 @@
-package org.servlet.article;
+package org.servlet.article.message;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -6,16 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.entity.Article;
 import org.entity.User;
 import org.service.ArticleService;
 import org.service.UserService;
-import org.util.TimeUtil;
 
 import java.io.IOException;
 
-@WebServlet("/add-FavorArticle")
-public class AddFavorArticleServlet extends HttpServlet {
+@WebServlet("/delete-Message")
+public class DeleteMessageServlet extends HttpServlet {
     ArticleService articleService;
     UserService userService;
 
@@ -28,18 +26,14 @@ public class AddFavorArticleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Article article = (Article) session.getAttribute("NowArticle");
-        User userinfo = (User) session.getAttribute("UserInfo");
-        String Time = TimeUtil.getCurrentDateTimeFormatted("yyyy-MM-dd HH:mm:ss");
-        if (articleService.AddFavorArticle(userinfo.UserId,article.ArticleId,Time,article.Title)) {
-            resp.sendRedirect("get-NowArticle");
-        }
+        User user = (User) session.getAttribute("UserInfo");
+        int MessageId = Integer.parseInt(req.getParameter("MessageId"));
 
+        int userid =articleService.getUserIdByMessageId(MessageId);
+        if(user.UserId==userid){
+            articleService.deleteMessageByMessageId(MessageId);
+        }
+        resp.sendRedirect("get-NowArticle");
     }
 }

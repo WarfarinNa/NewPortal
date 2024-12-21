@@ -1,8 +1,6 @@
 package org.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.entity.Article;
 import org.entity.Message;
 
@@ -20,8 +18,8 @@ public interface ArticleMapper {
     @Select("SELECT * from article where ArticleId=#{ArticleId}")
     Article getNowArticleByArticleId(@Param("ArticleId")int ArticleId);
 
-    @Insert("INSERT into favoritesarticle(UserId, ArticleId, CreateTime) VALUES (#{UserId},#{ArticleId},#{CreateTime})")
-    Boolean AddFavorArticle(@Param("UserId")int UserId,@Param("ArticleId")int ArticleId,@Param("CreateTime")String CreateTime);
+    @Insert("INSERT into favoritesarticle(UserId, ArticleId, CreateTime,Title) VALUES (#{UserId},#{ArticleId},#{CreateTime},#{ArticleTitle})")
+    Boolean AddFavorArticle(@Param("UserId")int UserId,@Param("ArticleId")int ArticleId,@Param("CreateTime")String CreateTime,@Param("ArticleTitle")String ArticleTitle);
 
     @Select("SELECT * from favoritesarticle where UserId = #{UserId}")
     List<Article> getAllFavorArticleByUserId(@Param("UserId")int UserId);
@@ -33,8 +31,19 @@ public interface ArticleMapper {
             "VALUES (#{Content},#{UserId},#{ArticleId},#{CreatTime})")
     Boolean addMessageByUserId(@Param("Content")String Content,
                                @Param("UserId")int UserId,@Param("ArticleId")int ArticleId,@Param("CreatTime")String CreatTime);
+    @Select("SELECT * FROM article WHERE Title LIKE CONCAT('%', #{articleTitle}, '%')")
+    List<Article> findArticlesByTitle(@Param("articleTitle") String articleTitle);
 
+    @Delete("Delete  FROM messageboard where MessageId = #{messageId}")
+    void deleteMessageByMessageId(@Param("messageId") int messageId);
 
+    @Select("SELECT UserId from messageboard where MessageId =#{messageId}")
+    int getUserIdByMessageId(@Param("messageId") int messageId);
 
+    @Select("SELECT * FROM article WHERE AuthorID =#{UserId}")
+    List<Article> findArticlesByUserId(@Param("UserId") int UserId);
 
+    @Update("UPDATE article SET Title = #{title},Content = #{content}, CreateTime = #{createTime} WHERE ArticleId = #{ArticleId}")
+    void UpdateArticleByArticleId(@Param("title")String title,@Param("content")
+    String content,@Param("createTime")String createTime,@Param("ArticleId")int ArticleId);
 }

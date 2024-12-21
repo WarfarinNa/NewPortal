@@ -30,10 +30,10 @@ public class ArticleService {
         }
     }
 
-    public boolean AddFavorArticle(int UserId,int ArticleId,String CreateTime) {
+    public boolean AddFavorArticle(int UserId,int ArticleId,String CreateTime,String ArticleTitle) {
         try(SqlSession sqlSession = MybatisUtil.getSession()){
             ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
-            return mapper.AddFavorArticle(UserId,ArticleId,CreateTime);
+            return mapper.AddFavorArticle(UserId,ArticleId,CreateTime,ArticleTitle);
         }
     }
     public List<Article> getAllFavorArticle(int UserId) {
@@ -57,4 +57,38 @@ public class ArticleService {
         }
     }
 
+    public List<Article> findArticlesByTitle(String ArticleTitle) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            return mapper.findArticlesByTitle(ArticleTitle);
+        }
+    }
+
+    public void deleteMessageByMessageId(int messageId) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            mapper.deleteMessageByMessageId(messageId);
+        }
+    }
+
+    public int getUserIdByMessageId(int messageId) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            return mapper.getUserIdByMessageId(messageId);
+        }
+    }
+
+    public List<Article> findArticlesByUserId(int UserId) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            return mapper.findArticlesByUserId(UserId);
+        }
+    }
+
+    public void UpdateArticleByArticleId(String title,String content,String createTime,int ArticleId) {
+        try(SqlSession sqlSession = MybatisUtil.getSession()){
+            ArticleMapper mapper = sqlSession.getMapper(ArticleMapper.class);
+            mapper.UpdateArticleByArticleId(title, content, createTime, ArticleId);
+        }
+    }
 }

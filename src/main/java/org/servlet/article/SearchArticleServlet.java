@@ -7,19 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.entity.Article;
-import org.entity.Message;
-import org.entity.User;
 import org.service.ArticleService;
 import org.service.UserService;
-import org.thymeleaf.context.Context;
-import org.util.ThymeleafUtil;
-import org.util.TimeUtil;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/add-Message")
-public class AddMessageServlet extends HttpServlet {
+@WebServlet("/search-NowArticle")
+public class SearchArticleServlet extends HttpServlet {
     ArticleService articleService;
     UserService userService;
 
@@ -37,15 +32,10 @@ public class AddMessageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String articleTitle = req.getParameter("ArticleTitle");
+        List<Article> articles = articleService.findArticlesByTitle(articleTitle);
         HttpSession session = req.getSession();
-        int articleId = Integer.parseInt(req.getParameter("articleId"));
-        String content = req.getParameter("MessageContent");
-        User userinfo = (User) session.getAttribute("UserInfo");
-        String Time = TimeUtil.getCurrentDateTimeFormatted("yyyy-MM-dd HH:mm:ss");
-
-        if (articleService.addMessageByUserId(content,userinfo.UserId,articleId,Time)) {
-            resp.sendRedirect("get-NowArticle");
-        }
-
+        session.setAttribute("SearchArticleResult",articles);
+        resp.sendRedirect("search-ArticleResult");
     }
 }

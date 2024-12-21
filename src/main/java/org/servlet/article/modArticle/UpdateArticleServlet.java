@@ -1,4 +1,4 @@
-package org.servlet.article;
+package org.servlet.article.modArticle;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.entity.Article;
 import org.entity.User;
 import org.service.ArticleService;
 import org.service.UserService;
@@ -14,9 +15,10 @@ import org.util.ThymeleafUtil;
 import org.util.TimeUtil;
 
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet("/upload-Article")
-public class UploadArticleServlet extends HttpServlet {
+@WebServlet("/Update-article")
+public class UpdateArticleServlet extends HttpServlet {
     ArticleService articleService;
     UserService userService;
 
@@ -27,31 +29,20 @@ public class UploadArticleServlet extends HttpServlet {
         this.userService = new UserService(); // 初始化 LoginService
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        User userinfo = (User) session.getAttribute("UserInfo");
-        Context context = new Context();
-        context.setVariable("UserInfo",userService.getNowUserInfoByUserName(userinfo.UserName));
-        ThymeleafUtil.process("uploadArticle.html",context,resp.getWriter());
-
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         HttpSession session = req.getSession();
+        User userinfo = (User) session.getAttribute("UserInfo");
 
         String title = req.getParameter("title");
         String content = req.getParameter("content");
         String formattedDateTime = TimeUtil.getCurrentDateTimeFormatted("yyyy-MM-dd HH:mm:ss");
 
-        User userinfo = (User) session.getAttribute("UserInfo");
+        Article article = (Article) session.getAttribute("WaitUpdateArticle");
 
-        if(userService.findUserRoleByUserName(userinfo.UserName).equals("user")){
-            if (articleService.UploadArticle(title,content,userinfo.UserId, formattedDateTime)) {
-                resp.sendRedirect("upload-Article");
-            }
-        }
-
+        articleService.UpdateArticleByArticleId(title,content,formattedDateTime,article.ArticleId);
+        resp.sendRedirect("showUpload-article");
     }
 }

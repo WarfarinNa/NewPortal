@@ -32,10 +32,22 @@ public class GetNowArticleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        int articleId = Integer.parseInt(req.getParameter("ArticleId"));
+//        int articleId = Integer.parseInt(req.getParameter("ArticleId"));
+        String articleIdParam = req.getParameter("ArticleId");
+        int articleId = 0;
+        if (articleIdParam == null || articleIdParam.trim().isEmpty()) {
+            // 参数为空或只有空白字符
+            Article article = (Article) session.getAttribute("NowArticle");
+            articleId = article.getArticleId();
+        } else {
+            articleId = Integer.parseInt(articleIdParam);
+        }
+
         User userinfo = (User) session.getAttribute("UserInfo");
         Article article = articleService.getNowArticle(articleId);
         List<Message> messages = articleService.getAllMessageByArticleId(articleId);
+
+        session.setAttribute("NowArticle", article);
 
         Context context = new Context();
         context.setVariable("UserInfo",userinfo);

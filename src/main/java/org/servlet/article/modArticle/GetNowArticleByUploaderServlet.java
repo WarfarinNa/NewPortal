@@ -1,4 +1,4 @@
-package org.servlet.user;
+package org.servlet.article.modArticle;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -7,18 +7,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.entity.Article;
+import org.entity.Message;
 import org.entity.User;
 import org.service.ArticleService;
 import org.service.UserService;
 import org.thymeleaf.context.Context;
 import org.util.ThymeleafUtil;
-import org.util.TimeUtil;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/update-userInfo")
-public class UpdateUserInfoServlet extends HttpServlet {
+@WebServlet("/getUpload-NowArticle")
+public class GetNowArticleByUploaderServlet extends HttpServlet {
     ArticleService articleService;
     UserService userService;
 
@@ -32,28 +32,24 @@ public class UpdateUserInfoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+
+        String articleIdParam = req.getParameter("ArticleId");
+        int articleId = Integer.parseInt(articleIdParam);
+
         User userinfo = (User) session.getAttribute("UserInfo");
-        List<Article> articles = articleService.getAllFavorArticle(userinfo.UserId);
-        System.out.println("喜欢的文章"+articles);
+        Article article = articleService.getNowArticle(articleId);
+
+        session.setAttribute("WaitUpdateArticle", article);
+
         Context context = new Context();
         context.setVariable("UserInfo",userinfo);
-        context.setVariable("FavorArticle",articles);
-        ThymeleafUtil.process("userInfo.html",context,resp.getWriter());
+        context.setVariable("WaitUpdateArticle",article);
 
+        ThymeleafUtil.process("modifyArticle.html",context,resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
 
-        String password = req.getParameter("password");
-        String sex = req.getParameter("sex");
-        String signature = req.getParameter("signature");
-
-        User userinfo = (User) session.getAttribute("UserInfo");
-
-        if (userService.upDateUserInfoByUserName(userinfo.UserName,password,sex,signature)) {
-            resp.sendRedirect("update-userInfo");
-        }
     }
 }
