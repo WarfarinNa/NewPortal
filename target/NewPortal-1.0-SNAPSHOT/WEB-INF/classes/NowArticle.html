@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文章详情</title>
+</head>
+<body>
+<!-- 显示文章详情 -->
+<h2 th:text="${NowArticle.title}">文章标题</h2>
+<p>作者：<span th:text="${NowArticle.authorId}">作者名</span></p>
+<p>创作时间：<span th:text="${NowArticle.createTime}">2024-12-19</span></p>
+<p>内容：<span th:text="${NowArticle.content}">文章内容</span></p>
+
+<h2 >收藏文章</h2>
+<form action="add-FavorArticle" method="post">
+    <button type="submit">喜欢这篇文章</button>
+</form>
+
+<!-- 评论区 -->
+<h3>评论区</h3>
+<ul>
+    <li th:each="comment : ${MessageBoard}">
+        <p>
+            评论者ID：<span th:text="${comment.userId}">评论者Id</span>
+            发布时间：<span th:text="${comment.creatTime}">2024-12-19</span>
+        </p>
+        <p>评论内容：<span th:text="${comment.content}">评论内容</span></p>
+<!--        <form th:action="'delete-Message?MessageId='+ ${comment.MessageId}" method="get">-->
+<!--        <form th:action="'window.location.href=\'delete-Message?MessageId='+ ${comment.MessageId} + '\';'" method="get">-->
+<!--            <button type="submit">删除评论</button>-->
+<!--        </form>-->
+        <button th:onclick="'window.location.href=\'delete-Message?MessageId=' + ${comment.MessageId} + '\';'">删除评论</button>
+    </li>
+</ul>
+
+
+<h2>添加评论</h2>
+<form th:action="'add-Message?ArticleId='+ ${NowArticle.articleId}" method="post">
+    <label>
+        <textarea name="MessageContent" placeholder="请输入评论内容"></textarea>
+    </label>
+    <button type="submit">提交评论</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Article</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333333;
+            text-align: center;
+        }
+
+        .user-info {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 16px;
+            color: #555555;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 150px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .form-group button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Upload Your Article</h2>
+
+    <!-- 用户身份信息 -->
+    <div class="user-info">
+        Welcome, <span th:text="${UserInfo.userName}"></span>! You are logged in as
+        <span th:text="${UserInfo.Role}"></span>.
+    </div>
+
+    <!-- 文章上传表单 -->
+    <form action="upload-Article" method="post">
+        <div class="form-group">
+            <label for="title">Article Title:</label>
+            <input type="text" id="title" name="title" placeholder="Enter article title" required>
+        </div>
+        <div class="form-group">
+            <label for="content">Article Content:</label>
+            <textarea id="content" name="content" placeholder="Write your article here" required></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit">Upload Article</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

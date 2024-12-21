@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>显示已上传文章</title>
+</head>
+<body>
+<h1 th:text="${UserInfo.userName}">欢迎，</h1>
+<h2>您上传的文章</h2>
+
+<!-- 遍历所有文章 -->
+<div>
+    <ul>
+        <li th:each="article : ${UploadArticle}">
+            <span th:text="${article.title}">标题</span>
+<!--                <a th:href="@{'/getUpload-NowArticle?ArticleId=' + ${article.articleId}}">修改</a>-->
+            <button th:onclick="'window.location.href=\'getUpload-NowArticle?ArticleId=' + ${article.articleId} + '\';'">修改</button>
+        </li>
+    </ul>
+
+</div>
+
+</body>
+</html>

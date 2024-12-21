@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>所有文章</title>
+</head>
+<body>
+<!-- 显示当前用户 -->
+<h2>当前用户：<span th:text="${UserInfo.UserName}">User Name</span></h2>
+<form action="search-NowArticle" method="post">
+    <label for="ArticleTitle">文章标题:</label>
+    <input type="text" id="ArticleTitle" name="ArticleTitle">
+    <button type="submit">搜索</button>
+</form>
+<!-- 展示所有文章 -->
+<h3>文章列表</h3>
+<ul>
+    <li th:each="article : ${AllArticle}">
+        <p>
+            文章标题：<span th:text="${article.title}">文章标题</span>
+            <!-- 跳转到 NowArticle 页面按钮 -->
+            <button th:onclick="'window.location.href=\'get-NowArticle?ArticleId=' + ${article.articleId} + '\';'">查看详情</button>
+        </p>
+        <p>作者：<span th:text="${article.authorId}">序列号</span></p>
+        <p>创作时间：<span th:text="${article.createTime}">2024-12-19</span></p>
+        <p>内容摘要：<span th:text="${article.content}">文章内容摘要</span>...</p>
+    </li>
+</ul>
+</body>
+</html>
+

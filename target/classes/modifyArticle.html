@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修改文章</title>
+</head>
+<body>
+<h1>修改文章</h1>
+
+<!-- 显示当前文章标题和内容 -->
+<form action="Update-article" method="post">
+    <input type="hidden" name="articleId" th:value="${WaitUpdateArticle.articleId}" />
+
+    <div>
+        <label for="title">标题：</label>
+        <input type="text" id="title" name="title" th:value="${WaitUpdateArticle.title}" required />
+    </div>
+
+    <div>
+        <label for="content">内容：</label>
+        <textarea id="content" name="content" required th:text="${WaitUpdateArticle.content}"></textarea>
+    </div>
+
+    <div>
+        <button type="submit">确认修改</button>
+    </div>
+</form>
+
+<a href="showUpload-article">返回文章列表</a>
+</body>
+</html>
